@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You are Special</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a0b1a, #4a1c40); /* Dark romantic purple bg */
+            font-family: 'Nunito', sans-serif;
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .btn {
+            background: #ff4d79;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 77, 121, 0.4);
+            transition: transform 0.2s;
+            margin-top: 20px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: bold;
+        }
+        .btn:active { transform: scale(0.95); }
+
+        h1 { font-family: 'Pacifico', cursive; font-size: 2.5rem; color: #ff99ac; margin-bottom: 10px; }
+        p { font-size: 1.1rem; color: #ddd; margin-bottom: 20px; line-height: 1.5; }
+        
+        /* Images */
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ff4d79;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Screen 1: Home */
+        #screen1 .subtext { font-size: 0.9rem; opacity: 0.8; }
+
+        /* Screen 2: Meter */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 5px;
+            margin: 20px 0;
+            height: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #ff4d79, #ff99ac);
+            height: 100%;
+            border-radius: 20px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        .percentage {
+            margin-top: 10px;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .warning {
+            color: #ffeb3b;
+            font-weight: bold;
+            margin-top: 15px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            background: rgba(255, 0, 0, 0.2);
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        /* Screen 3: Compliments */
+        .heart-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            font-size: 1rem;
+        }
+        .heart-btn.revealed {
+            background: white;
+            color: #4a1c40;
+            font-weight: bold;
+            transform: scale(1.02);
+        }
+        
+        /* Screen 4: The Note */
+        .card {
+            background: white;
+            color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 200px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .card-content {
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            display: none;
+        }
+        .card.open .card-content { display: block; }
+        .card.open .tap-hint { display: none; }
+        .tap-hint { font-weight: bold; color: #ff4d79; animation: pulse 1.5s infinite; }
+        
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
+        /* Screen 5: Final */
+        #screen5 h1 { font-size: 2rem; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="screen1">
+                        <h1>Hey Charu ❤️</h1>
+            <p>Do you even know how cute you are?</p>
+            <button class="btn" onclick="goToScreen2()">Open My Heart ❤️</button>
+        </div>
+
+        <div id="screen2" class="hidden">
+            <p>Measuring your cuteness...</p>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="percentage" id="percentageText">0%</div>
+            <div class="warning" id="warningMsg">⚠️ WARNING: TOO CUTE TO HANDLE</div>
+            <button class="btn hidden" id="nextBtn2" onclick="goToScreen3()">See more -></button>
+        </div>
+
+        <div id="screen3" class="hidden">
+            <div style="font-size: 3rem; color: #ff4d79; margin-bottom: 10px;">❤️</div>
+            <h1>Just for you</h1>
+            <p class="subtext">Tap each one to reveal</p>
+            
+            <button class="heart-btn" onclick="reveal(this, 'You look adorable')">❤️</button>
+            <button class="heart-btn" onclick="reveal(this, 'You have the sweetest vibe')">❤️</button>
+            <button class="heart-btn" onclick="reveal(this, 'You make things feel lighter')">❤️</button>
+            <button class="heart-btn" onclick="reveal(this, 'You are naturally charming')">❤️</button>
+            <button class="heart-btn" onclick="reveal(this, 'You make everything feel special')">❤️</button>
+
+            <button class="btn" onclick="goToScreen4()">See more -></button>
+        </div>
+
+        <div id="screen4" class="hidden">
+            <h1>A little note for you</h1>
+            
+            <div class="card" onclick="openLetter(this)">
+                <div class="tap-hint">💌 Tap to open</div>
+                <div class="card-content">
+                   Aaj hi japun thevtoy maze mann. ✨ Tuzya sobatacha to pratek kshan, ❤️                  
+                      <br><br>
+                    Tuzya sobhat  hasri swapna aani tyat tuzi god athvani, 🌸 Priyee Tuch aahes mazi khari sanjivani aani tuch Mazi sakhurani. 💎         
+           <br><br>
+                   Janmadinachya ya god shubhechha, mazi Charurani 🎂                </div>
+            </div>
+
+            <button class="btn hidden" id="nextBtn4" onclick="goToScreen5()">One more thing -></button>
+        </div>
+
+        <div id="screen5" class="hidden">
+            <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExajVvY3J5cHR4YnZ6bnZ4cWkxYnZ4cWkxYnZ4cWkxYnZ4cWkxeCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26FLdmIp6wJr91JAI/giphy.gif" class="avatar" alt="Final Avatar">
+            <h1>You'll always be special to me ❤️</h1>
+        </div>
+    </div>
+
+    <script>
+        // --- JAVASCRIPT LOGIC ---
+
+        function goToScreen2() {
+            document.getElementById('screen1').classList.add('hidden');
+            document.getElementById('screen2').classList.remove('hidden');
+            startMeter();
+        }
+
+        function startMeter() {
+            let width = 0;
+            const bar = document.getElementById('progressBar');
+            const text = document.getElementById('percentageText');
+            
+            const interval = setInterval(() => {
+                if (width >= 120) {
+                    clearInterval(interval);
+                    document.getElementById('warningMsg').style.opacity = '1';
+                    setTimeout(() => {
+                        document.getElementById('nextBtn2').classList.remove('hidden');
+                    }, 500);
+                } else {
+                    width++;
+                    bar.style.width = width + '%';
+                    text.innerText = width + '%';
+                }
+            }, 30); // Speed of the bar
+        }
+
+        function goToScreen3() {
+            document.getElementById('screen2').classList.add('hidden');
+            document.getElementById('screen3').classList.remove('hidden');
+        }
+
+        function reveal(btn, text) {
+            btn.innerHTML = text;
+            btn.classList.add('revealed');
+        }
+
+        function goToScreen4() {
+            document.getElementById('screen3').classList.add('hidden');
+            document.getElementById('screen4').classList.remove('hidden');
+        }
+
+        function openLetter(card) {
+            card.classList.add('open');
+            setTimeout(() => {
+                document.getElementById('nextBtn4').classList.remove('hidden');
+            }, 1000);
+        }
+
+        function goToScreen5() {
+            document.getElementById('screen4').classList.add('hidden');
+            document.getElementById('screen5').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
